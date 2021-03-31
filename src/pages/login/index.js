@@ -26,6 +26,8 @@ export default memo(function Login(props) {
     }
 
     const res = await getLoginOpenId(userName, password);
+    console.log(res)
+    // return
     setIsLoading(false);
     if (res.data === "success") {
       localStorage.setItem("openId", res.openId);
