@@ -11,8 +11,6 @@ import Loadable from 'react-loadable'
 // const CommentBoard = React.lazy(_ => import('@/pages/admin/c-pages/comment-board'))
 
 const MyLoadingComponent = ({ isLoading, error }) => {
-
-  console.log("===")
   // Handle the loading state
   if (isLoading) {
     return <div>Loading...</div>
