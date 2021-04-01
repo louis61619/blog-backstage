@@ -11,6 +11,8 @@ export function getLoginOpenId(name, password) {
   })
 }
 
-export function name(params) {
-  
+export function getIndex() {
+  return request({
+    url: "/admin/index",
+  })
 }

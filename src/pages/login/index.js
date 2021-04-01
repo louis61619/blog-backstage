@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback } from "react";
 
-import { getLoginOpenId } from "@/services/login";
+import { getLoginOpenId, getIndex } from "@/services/login";
 
 import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 import { Card, Input, Button, Spin, message } from "antd";
@@ -24,9 +24,9 @@ export default memo(function Login(props) {
       message.error("密碼不能為空");
       return false;
     }
-
+    const res1 = await getIndex();
     const res = await getLoginOpenId(userName, password);
-    console.log(res)
+    console.log(res);
     // return
     setIsLoading(false);
     if (res.data === "success") {

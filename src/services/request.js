@@ -1,12 +1,13 @@
 import axios from 'axios'
-
 import { BASE_URL, TIMEOUT } from './config'
+
+// const https = require('https');
 
 const instance = axios.create({
   baseURL: BASE_URL,
   timeout: TIMEOUT,
   header:{ 'Access-Control-Allow-Origin':'*' },
-  withCredentials: true
+  withCredentials: true,
 })
 
 instance.interceptors.request.use(config => {
