@@ -22,7 +22,6 @@ export function addContent(title, introduce, articleContent, releaseTime, viewCo
 }
 
 export function updateContent(id, title, introduce, articleContent, releaseTime) {
-  console.log(id, title, introduce, articleContent, releaseTime)
   return request({
     method: "POST",
     url: "/admin/updateContent",
@@ -60,7 +59,6 @@ export function setArticleLabels(id, labels) {
 }
 
 export function uploadPicture(data, onUploadProgress, id) {
-  console.log(data)
   return request({
     method: "POST",
     headers: {"content-type": "multipart/form-data"},

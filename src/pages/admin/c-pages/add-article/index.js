@@ -1,9 +1,7 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 
 import moment from 'moment'
-import marked from "marked";
-import hljs from "highlight.js";
-import 'highlight.js/styles/monokai-sublime.css';
+import marked from "@/utils/markdown-formate";
 
 import { getLabelInfo, addContent, updateContent, getArticleById, setArticleLabels } from "@/services/addAritcle";
 
@@ -31,23 +29,6 @@ export default memo(function AddAritcle(props) {
   const [selectedItems, setSelectedItems] = useState([])
   const [isDrawerShow, setIsDrawerShow] = useState(false);
   const [fileList, setFileList] = useState([]);
-
-  // const renderer = new marked.Renderer();
-
-  marked.setOptions({
-    // renderer: marked.Renderer(),
-    gfm: true,
-    pedantic: false,
-    sanitize: false,
-    tables: true,
-    breaks: false,
-    smartLists: true,
-    smartypants: false,
-    langPrefix: "hljs language-",
-    highlight: function(code) {
-      return hljs.highlightAuto(code, ["html", "javascript"]).value;
-    }
-  });
 
   useEffect(() => {
     getLabelInfo().then((res) => {
@@ -140,29 +121,6 @@ export default memo(function AddAritcle(props) {
     if(!articleId) return message.error('請先保存文章')
     setIsDrawerShow(true);
   };
-
-//   const MARKDOWN_TEXT = `React + marked + highlight.js
-
-// **Code Sample:**
-// \`\`\`javascript
-// import marked from "marked";
-
-// marked.setOptions({
-//   langPrefix: "hljs language-",
-//   highlight: function(code) {
-//     return require("highlight.js").highlightAuto(code, ["html", "javascript"])
-//       .value;
-//   }
-// });
-// \`\`\`
-// `;
-
-// marked.setOptions({
-//   langPrefix: "hljs language-",
-//   highlight: function(code) {
-//     return hljs.highlightAuto(code, ["html", "javascript"]).value;
-//   }
-// });
 
   return (
     <WorkbanchWrapper>

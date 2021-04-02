@@ -89,7 +89,8 @@ export default memo(function PictureDrawer(props) {
     <div onClick={e => {
       var dummy = document.createElement('input')
       document.body.appendChild(dummy);
-      dummy.value = previewImage;
+      const imageUrl = new URL(previewImage)
+      dummy.value = `![images](${imageUrl.pathname.substr(1)})`;
       dummy.select();
       document.execCommand('copy');
       document.body.removeChild(dummy);
