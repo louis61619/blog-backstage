@@ -17,15 +17,15 @@ export default memo(function AddAritcle(props) {
   const tmpId = props.match.params.id
 
   const labelRef = useRef()
-  const [articleId, setArticleId] = useState(0); // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
-  const [articleTitle, setArticleTitle] = useState(""); //文章标题
-  const [articleContent, setArticleContent] = useState(""); //markdown的编辑内容
-  const [markdownContent, setMarkdownContent] = useState("預覽內容"); //html内容
-  const [introducemd, setIntroducemd] = useState(); //简介的markdown内容
-  const [introducehtml, setIntroducehtml] = useState("等待編輯"); //简介的html内容
+  const [articleId, setArticleId] = useState(0); // 文章ＩＤ，0為新增，其他為修改
+  const [articleTitle, setArticleTitle] = useState(""); // 文章標題
+  const [articleContent, setArticleContent] = useState(""); // 文章的markdown
+  const [markdownContent, setMarkdownContent] = useState("預覽內容"); // 文章的html
+  const [introducemd, setIntroducemd] = useState(); // 簡介的markdown
+  const [introducehtml, setIntroducehtml] = useState("等待編輯");
   const [releaseDate, setReleaseDate] = useState(); // 發布的日期
   const [isRelease, setIsRelease] = useState(false)
-  const [labelInfo, setLabelInfo] = useState([]); // 文章类别信息
+  const [labelInfo, setLabelInfo] = useState([]); // 文章類別
   const [selectedItems, setSelectedItems] = useState([])
   const [isDrawerShow, setIsDrawerShow] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -46,7 +46,7 @@ export default memo(function AddAritcle(props) {
         setArticleContent(context)
         setReleaseDate( releaseTime && moment(releaseTime).format('YYYY-MM-DD'))
         releaseTime && setIsRelease(true)
-        setSelectedItems(labels ? JSON.parse(labels).map(item => item.id): [])
+        setSelectedItems(labels ? JSON.parse(labels).map(item => item.id): null)
         setFileList(images? JSON.parse(images).map(item => {
           const obj = {}
           obj.uid = item
@@ -168,7 +168,7 @@ export default memo(function AddAritcle(props) {
               />
             </Col>
           </Row>
-          <br />
+          {/* <br />
           <Row gutter={10}>
             <Col span={24}>
               <div
@@ -178,13 +178,13 @@ export default memo(function AddAritcle(props) {
                 }}
               />
             </Col>
-          </Row>
+          </Row> */}
           <br />
           <Row gutter={10}>
             <Col span={24}>
               <LabelSelect labelInfo={labelInfo}
                            selectedItems={selectedItems}
-                           selectLabelHandler={selectLabelHandler} 
+                           selectLabelHandler={selectLabelHandler}
                            ref={labelRef}/>
             </Col>
           </Row>

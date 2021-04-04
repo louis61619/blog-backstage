@@ -2,7 +2,7 @@
 @import "~antd/dist/antd.css";
 
 
-/* 样式的重置 */
+/* 樣式重置 */
 * {
   box-sizing: border-box;
 }
@@ -14,6 +14,7 @@ body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, header, menu, sectio
 
 body {
   background-color: #f0f0f0;
+  font-family:Helvetica,Tahoma, Arial,"PingFang SC",STXihei,"Microsoft yahei","WenQuanYi Micro Hei",sans-serif;
 }
 
 ul, ol, li {

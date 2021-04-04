@@ -1,6 +1,6 @@
-import React, { memo, useState, useCallback } from "react";
+import React, { memo, useState, useCallback, useEffect } from "react";
 
-import { getLoginOpenId, getIndex } from "@/services/login";
+import { getLoginOpenId } from "@/services/login";
 
 import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 import { Card, Input, Button, Spin, message } from "antd";
@@ -24,10 +24,8 @@ export default memo(function Login(props) {
       message.error("密碼不能為空");
       return false;
     }
-    const res1 = await getIndex();
     const res = await getLoginOpenId(userName, password);
-    console.log(res);
-    // return
+
     setIsLoading(false);
     if (res.data === "success") {
       localStorage.setItem("openId", res.openId);
@@ -36,6 +34,21 @@ export default memo(function Login(props) {
       message.error("用戶名或密碼錯誤");
     }
   }, [userName, password, history]);
+
+
+  const handleUserKeyPress = useCallback(event => {
+    const { keyCode } = event;
+    if (keyCode === 13) {
+      checkLogin()
+    }
+  }, [checkLogin]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleUserKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, [handleUserKeyPress]);
 
   return (
     <LoginWrapper>

@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { renderRoutes } from "react-router-config";
+import { logout } from '@/services/login'
 
 import { Layout, Menu, Breadcrumb } from "antd";
 import {
@@ -27,16 +28,23 @@ export default memo(function Admin(props) {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <Link to="/login"
+        <Link
+          to="/login"
+          onClick={() => {
+            logout().then(res => {
+              console.log(res)
+            })
+          }}
           style={{
             height: "32px",
             margin: "16px",
             display: "flex",
             fontSize: "1.5vw",
             color: "white",
+            cursor: "pointer"
           }}
         >Sign out</Link>
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+        <Menu theme="dark" mode="inline">
           <Menu.Item key="1">
           <Link to="/admin/workbanch">
             <PieChartOutlined />
@@ -83,8 +91,8 @@ export default memo(function Admin(props) {
         {/* <Header style={{ background: "#fff", padding: 0 }} /> */}
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>后台管理</Breadcrumb.Item>
-            <Breadcrumb.Item>工作台</Breadcrumb.Item>
+            {/* <Breadcrumb.Item>後台管理</Breadcrumb.Item>
+            <Breadcrumb.Item>Ｆ</Breadcrumb.Item> */}
           </Breadcrumb>
           <div style={{ padding: 24, background: "#fff", minHeight: 360 }}>
             {renderRoutes(route.routes)}

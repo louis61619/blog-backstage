@@ -11,6 +11,13 @@ export function getLoginOpenId(name, password) {
   })
 }
 
+export function logout() {
+  return request({
+    method: "POST",
+    url: "/admin/logout"
+  })
+}
+
 export function getIndex() {
   return request({
     url: "/admin/index",
