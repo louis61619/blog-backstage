@@ -19,11 +19,14 @@ export default memo(function Login(props) {
 
     if (!userName) {
       message.error("用戶名不能為空");
-      return false;
-    } else if (!password) {
-      message.error("密碼不能為空");
+      setIsLoading(true);
       return false;
     }
+    // if (!password) {
+    //   message.error("密碼不能為空");
+    //   setIsLoading(true);
+    //   return false;
+    // }
     const res = await getLoginOpenId(userName, password);
 
     setIsLoading(false);
