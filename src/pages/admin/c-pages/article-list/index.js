@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import moment from 'moment'
 import {
   useLocation
@@ -57,24 +57,23 @@ export default memo(function ArticleList(props) {
 
   const onSearch = e => {
     if (value) {
-      history.push({
-        pathname: history.location.pathname,
-        search: `?s=${value}`
-      })
       setChangeFun(() => {
         return async (offset, size) => {
           return searchArticleList(offset, size, value)
         }
       })
-    } else {
-      history.push({
+      history.replace({
         pathname: history.location.pathname,
+        search: `?s=${value}`
       })
+    } else {
       setChangeFun(() => {
         return getArticleList
       })
+      history.replace({
+        pathname: history.location.pathname,
+      })
     }
-    paginationRef.current.resetPage()
   }
 
   const updateContent = (id) => {

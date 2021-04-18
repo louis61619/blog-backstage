@@ -8,6 +8,7 @@ export const useChangeList = (func) => {
 
   const changeList = useCallback((page) => {
     changeFun((page - 1) * 8, 8).then(res => {
+      console.log(res)
       setList(res.data)
       setCount(res.count)
     })
