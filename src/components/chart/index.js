@@ -31,9 +31,9 @@ export default memo(function Chart() {
     yAxis: {
       type: 'value',
       minInterval: 1,
-      max: function(value) {
-        return value.max + 10
-      }
+      // max: function(value) {
+      //   return value.max + 10
+      // }
     },
     series: [
       {

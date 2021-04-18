@@ -1,13 +1,23 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { renderRoutes } from "react-router-config";
 import moment from 'moment'
-import { history } from "@/store";
 import { ConnectedRouter } from "connected-react-router/immutable";
 import { push } from 'connected-react-router'
+
+import { history } from "@/store";
+import {
+  routes as publicRoutes,
+  authRoutes
+} from '@/router'
+
 
 import { getAdminInfoAction } from "@/store/admin/actions";
 
 export default memo(function AuthRouter(props) {
+
+  const [isLogin, setIsLogin] = useState(false)
+  const [routes, setRoutes] = useState([])
   const { pathname } = useSelector(
     (state) => ({
       pathname: state.getIn(["router", "location", "pathname"]),
@@ -27,6 +37,10 @@ export default memo(function AuthRouter(props) {
       dispatch(push('/login'))
     } else {
       dispatch(getAdminInfoAction())
+      if (pathname === '/login') {
+        dispatch(push('/admin'))
+      }
+      setIsLogin(true)
     }
   }, [pathname, dispatch]);
 
@@ -34,5 +48,15 @@ export default memo(function AuthRouter(props) {
     window.scrollTo(0, 0)
   }, [pathname])
 
-  return <ConnectedRouter history={history}>{props.children}</ConnectedRouter>;
+  useEffect(() => {
+    if(isLogin) {
+      setRoutes([...publicRoutes, ...authRoutes])
+      // console.log('已登錄', window.localStorage.openId)
+    } else {
+      setRoutes([...publicRoutes])
+      // console.log('未登錄')
+    }
+  }, [isLogin, dispatch])
+
+  return <ConnectedRouter history={history}>{renderRoutes(routes)}</ConnectedRouter>;
 });

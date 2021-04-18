@@ -11,23 +11,9 @@ import {
 } from './style'
 
 export default memo(function Member() {
-  // const [list, setList] = useState()
-  // const [count, setCount] = useState()
+
   const [list, count, changeList, setList] = useChangeList(getMemberList)
   const paginationRef = useRef()
-
-  // useEffect(() => {
-  //   getMemberList().then(res => {
-  //     setList(res.data)
-  //     setCount(res.count)
-  //   })
-  // }, [])
-
-  // const changeList = (page) => {
-  //   getMemberList((page - 1) * 8, page * 8).then(res => {
-  //     setList(res.data);
-  //   })
-  // }
 
   const checkChange = (e, index) => {
     const newList = list.map((item, indey) => {

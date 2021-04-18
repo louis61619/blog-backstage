@@ -1,11 +1,8 @@
 import React, { memo } from "react";
 // import  {BrowserRouter} from 'react-router-dom'
-import { renderRoutes } from "react-router-config";
 import Immutable from 'immutable'
 import { Provider} from "react-redux";
 import configureStore from "@/store";
-
-import routes from "@/router";
 
 import AuthRouter from '@/components/auth-router'
 
@@ -20,9 +17,10 @@ export default memo(function App() {
       {/* <ConnectedRouter history={history}>
       {renderRoutes(routes)}
       </ConnectedRouter> */}
-      <AuthRouter>
+      {/* <AuthRouter>
       {renderRoutes(routes)}
-      </AuthRouter>
+      </AuthRouter> */}
+      <AuthRouter />
     </Provider>
   );
 });

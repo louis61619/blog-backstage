@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Redirect } from 'react-router-dom'
 import Loadable from 'react-loadable'
 
@@ -39,7 +40,7 @@ const Member = loadUrl(import('@/pages/admin/c-pages/member'))
 
 // const Login = rae
 
-const routes = [
+export const routes = [
   {
     path: '/',
     exact: true,
@@ -50,7 +51,10 @@ const routes = [
   {
     path: '/login',
     component: Login
-  },
+  }, 
+]
+
+export const authRoutes = [
   {
     path: '/admin',
     component: Admin,

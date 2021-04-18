@@ -17,6 +17,10 @@ export const WorkbanchWrapper = styled.div`
     overflow: auto;
   }
 
+  .introduce-text {
+    font-size: 16px;
+  }
+
   .introduce-html {
     padding: 10px;
     border: 1px solid #ddd;

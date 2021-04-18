@@ -39,7 +39,7 @@ export default memo(function Admin(props) {
             height: "32px",
             margin: "16px",
             display: "flex",
-            fontSize: "1.5vw",
+            fontSize: "24px",
             color: "white",
             cursor: "pointer"
           }}
@@ -98,7 +98,7 @@ export default memo(function Admin(props) {
             {renderRoutes(route.routes)}
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>CoderLand.com</Footer>
+        <Footer style={{ textAlign: "center" }}>CoderLand</Footer>
       </Layout>
     </Layout>
   );

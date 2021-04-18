@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 
+import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import marked from "@/utils/markdown-formate";
 
@@ -16,13 +17,14 @@ const { TextArea } = Input;
 export default memo(function AddAritcle(props) {
   const tmpId = props.match.params.id
 
+  const history = useHistory()
   const labelRef = useRef()
   const [articleId, setArticleId] = useState(0); // 文章ＩＤ，0為新增，其他為修改
   const [articleTitle, setArticleTitle] = useState(""); // 文章標題
   const [articleContent, setArticleContent] = useState(""); // 文章的markdown
   const [markdownContent, setMarkdownContent] = useState("預覽內容"); // 文章的html
   const [introducemd, setIntroducemd] = useState(); // 簡介的markdown
-  const [introducehtml, setIntroducehtml] = useState("等待編輯");
+  // const [introducehtml, setIntroducehtml] = useState("等待編輯");
   const [releaseDate, setReleaseDate] = useState(); // 發布的日期
   const [isRelease, setIsRelease] = useState(false)
   const [labelInfo, setLabelInfo] = useState([]); // 文章類別
@@ -56,7 +58,7 @@ export default memo(function AddAritcle(props) {
           return obj
         }): [])
 
-        setIntroducehtml(marked(introduce))
+        // setIntroducehtml(marked(introduce))
         setMarkdownContent(marked(context))
       })
     }
@@ -70,8 +72,8 @@ export default memo(function AddAritcle(props) {
 
   const changeIntroduce = (e) => {
     setIntroducemd(e.target.value);
-    let html = marked(e.target.value);
-    setIntroducehtml(html);
+    // let html = marked(e.target.value);
+    // setIntroducehtml(html);
   };
 
   const selectLabelHandler = (value) => {
@@ -79,10 +81,12 @@ export default memo(function AddAritcle(props) {
   }
 
   const saveArticle = async () => {
-    if(!selectedItems.length) return message.error('必須選擇文章標籤')
+
     if(!articleTitle) return message.error('文章標題不能為空')
-    if(!articleContent) return message.error('文章內容不能為空')
     if(!introducemd) return message.error('簡介不能為空')
+    if(!selectedItems.length) return message.error('必須選擇文章標籤')
+    if(!articleContent) return message.error('文章內容不能為空')
+    
     let res;
     if(articleId === 0) {
       res = await addContent(articleTitle, introducemd, articleContent)
@@ -93,6 +97,9 @@ export default memo(function AddAritcle(props) {
     if(!isSuccess) return message.error('文章保存失敗')
     setArticleId(res.insertId)
     await setArticleLabels(res.insertId, selectedItems)
+    history.replace({
+      pathname: history.location.pathname + '/' + res.insertId
+    })
     message.success('文章保存成功')
   }
 
@@ -150,7 +157,7 @@ export default memo(function AddAritcle(props) {
                {/* 1. 判斷有沒有發布 有發布的話無論如何只能有發布文章的按紐 發布 有發布日期 或是 已經發布
                2. 判斷有沒有發布日期 有發布日期的話就是發布文章 沒有就是暫存 暫存是沒有發布日期 同時 沒有發布 */}
               {!isRelease && !releaseDate? 
-               <Button size="large" type="primary" disabled={isRelease} onClick={saveArticle}>暫存文章</Button> :
+               <Button size="large" type="primary" disabled={isRelease} onClick={saveArticle}>保存文章</Button> :
               <Button type="primary" size="large" onClick={releaseAritcle}>
                 發布文章
               </Button>}
@@ -162,6 +169,7 @@ export default memo(function AddAritcle(props) {
               <TextArea
                 rows={4}
                 value={introducemd}
+                className="introduce-text"
                 onChange={changeIntroduce}
                 onPressEnter={changeIntroduce}
                 placeholder="文章簡介"

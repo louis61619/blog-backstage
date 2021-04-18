@@ -16,3 +16,14 @@ export function deleteContent(id) {
     url: "/admin/deleteContent/" + id,
   })
 }
+
+export function searchArticleList(offset, size, keyword) {
+  return request({
+    url: "/admin/searchArticleList",
+    params: {
+      offset,
+      size,
+      keyword
+    }
+  })
+}

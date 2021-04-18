@@ -2,19 +2,19 @@ import React, {
   memo,
   Fragment,
   useState,
-  useImperativeHandle,
   forwardRef,
-  useCallback,
   useContext,
   useEffect
 } from "react";
 
 import moment from "moment";
+
 import { replyComment, modifyComment, deleteComment } from "@/services/comment";
+import { addBlock } from '@/services/member';
 import { CommentContext } from '..'
 
 import { EllipsisOutlined, MessageOutlined } from "@ant-design/icons";
-import { Button, Input, Avatar, Menu, Dropdown, message } from "antd";
+import { Button, Input, Avatar, Menu, Dropdown } from "antd";
 import { UserCommentWrapper, ReplyWrapper, UserNameWrapper } from "./style";
 
 const { TextArea } = Input;
@@ -25,8 +25,7 @@ function ReplyArea(props) {
     placeholder="你想要說什麼？", 
     reply, 
     value, 
-    setValue, 
-    showTextarea, 
+    setValue,  
     setShowTextArea 
   } = props
 
@@ -59,15 +58,14 @@ const Comment = forwardRef((props, ref) => {
   const {
     commentList,
     setCommentList,
-    adminInfo
+    adminInfo,
+    paginationRef
   } = useContext(CommentContext)
   const { setBottomShow, replyList, setReplyList } = props
-  const { id, user, content, commentId, createTime, updateTime } = props.item;
+  const { id, user, content, updateTime } = props.item;
   const { id:userId, name:userName, avatarUrl } =  typeof user === "string"? JSON.parse(user): user
 
-  // console.log(props.item)
-
-  const [modify, isModify] = useState(false);
+  // const [modify, isModify] = useState(false);
   const [value, setValue] = useState(null);
   const [showTextarea, setShowTextArea] = useState(false);
 
@@ -120,6 +118,15 @@ const Comment = forwardRef((props, ref) => {
     }
   }
 
+  const blockMember = () => {
+    addBlock(true, userId).then(res => {
+      if(res.isSuccess) {
+        paginationRef.current.resetPage()
+        return
+      }
+    })
+  }
+
   const menu = (
     <Menu>
       <Menu.Item key="0" onClick={(e) => setShowTextArea(true)}>
@@ -127,6 +134,9 @@ const Comment = forwardRef((props, ref) => {
       </Menu.Item>
       <Menu.Item key="1" onClick={(e) => deleteAction()}>
         刪除評論
+      </Menu.Item>
+      <Menu.Item key="2" onClick={(e) => blockMember()}>
+        封鎖會員
       </Menu.Item>
     </Menu>
   );
@@ -169,11 +179,9 @@ export default memo(function UserComment(props) {
 
   const {
     adminInfo,
-    commentList,
-    setCommentList
   } = useContext(CommentContext)
-  const { id:commentId, user, content, createTime, childComments, articleId } = props.item;
-  const { id:userId, name:userName, avatarUrl } = JSON.parse(user)
+  const { id:commentId, user, childComments, articleId } = props.item;
+  const { name:userName } = JSON.parse(user)
 
   const [value, setValue] = useState(null);
   const [showTextarea, setShowTextArea] = useState(false);

@@ -5,6 +5,7 @@ import React, {
   createContext,
 } from "react";
 import { useSelector, shallowEqual } from "react-redux";
+
 import { useChangeList } from '@/utils/custom-hooks'
 import { getComment } from "@/services/comment";
 
@@ -41,7 +42,7 @@ export default memo(
     return (
       <CommentWrapper>
         <CommentContext.Provider
-          value={{ adminInfo, commentList: list, setCommentList: setList }}
+          value={{ adminInfo, commentList: list, setCommentList: setList, paginationRef }}
         >
           {/* 第一層就是沒有回覆評論這個屬性的留言 */}
           {list &&
