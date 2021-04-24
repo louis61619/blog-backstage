@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { renderRoutes } from "react-router-config";
+import { useHistory } from 'react-router-dom'
 import { logout } from '@/services/login'
 
 import { Layout, Menu, Breadcrumb } from "antd";
@@ -16,6 +17,7 @@ const { SubMenu } = Menu;
 
 export default memo(function Admin(props) {
   const { route } = props;
+  const router = useHistory()
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -25,17 +27,18 @@ export default memo(function Admin(props) {
     setCollapsed(!collapsed);
   }, [collapsed]);
 
+  const clickLogout = () => {
+    window.localStorage.removeItem('openId')
+    logout()
+    router.push('/login')
+  }
+
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <Link
-          to="/login"
-          onClick={() => {
-            window.localStorage.openId = null
-            logout().then(res => {
-              console.log(res)
-            })
-          }}
+        <div
+          onClick={clickLogout}
           style={{
             height: "32px",
             margin: "16px",
@@ -44,7 +47,7 @@ export default memo(function Admin(props) {
             color: "white",
             cursor: "pointer"
           }}
-        >Sign out</Link>
+        >Sign out</div>
         <Menu theme="dark" mode="inline">
           <Menu.Item key="1">
           <Link to="/admin/workbanch">
