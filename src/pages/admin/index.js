@@ -31,6 +31,7 @@ export default memo(function Admin(props) {
         <Link
           to="/login"
           onClick={() => {
+            window.localStorage.openId = null
             logout().then(res => {
               console.log(res)
             })
