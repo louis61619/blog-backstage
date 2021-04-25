@@ -13,6 +13,7 @@ body, html, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, header, menu, sectio
 }
 
 body {
+  min-width: 1200px;
   background-color: #f0f0f0;
   font-family:Helvetica,Tahoma, Arial,"PingFang SC",STXihei,"Microsoft yahei","WenQuanYi Micro Hei",sans-serif;
 }
