@@ -16,7 +16,7 @@ const renderer = new marked.Renderer();
 
 renderer.image = function (src, title, alt) {
   const newSrc = checkURL(src)? src : process.env.REACT_APP_STATIC_URL + src;
-  return `<img loading="lazy" src="${newSrc}" />`;
+  return `<img src="${newSrc}" />`;
 };
 
 marked.setOptions({
