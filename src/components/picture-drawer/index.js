@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 
-import { uploadPicture, getArticleById } from "@/services/addAritcle";
+import { uploadPicture, getArticleById, deletePicture } from "@/services/addAritcle";
 
 import { Drawer, Upload, Modal, message, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -31,14 +31,17 @@ export default memo(function PictureDrawer(props) {
 
   const handleChange = ({ fileList }) => setFileList(fileList);
 
-  const handleRemove = (file) => {
+  const handleRemove = async (file) => {
+    const imgUrl = file.url.split("/")
     return new Promise((resolve, reject) => {
       confirm({
         title: "提示",
         content: "圖片將永久刪除，無法恢復",
         onOk() {
-          resolve(true);
-          message.success("刪除成功");
+          deletePicture(imgUrl[imgUrl.length - 1]).then(res => {
+            resolve(true);
+            message.success("刪除成功");
+          })
         },
         onCancel() {
           resolve(false);

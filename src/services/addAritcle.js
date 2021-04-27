@@ -69,3 +69,13 @@ export function uploadPicture(data, onUploadProgress, id) {
     data,
   })
 }
+
+export function deletePicture(imgId) {
+  return request({
+    method: "DELETE",
+    url: "/admin/deletePicture",
+    params: {
+      imgId
+    }
+  })
+}
