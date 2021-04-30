@@ -8,4 +8,7 @@ module.exports = {
       "@": resolve("src")
     },
   },
+  devServer: {
+    port: 3001
+  }
 }
