@@ -1,4 +1,5 @@
 import React, { memo, useState } from "react";
+import Compressor from 'compressorjs';
 
 import { uploadPicture, getArticleById, deletePicture } from "@/services/addAritcle";
 
@@ -64,21 +65,51 @@ export default memo(function PictureDrawer(props) {
       onProgress({ percent: (event.loaded / event.total) * 100 });
     };
 
-    fmData.append("image", file);
-    uploadPicture(fmData, onUploadProgress, articleId).then((res) => {
-      if (!res.isSuccess) message.error('圖片上傳失敗');
-      getArticleById(articleId).then(res => {
-        setFileList(res.data.images? JSON.parse(res.data.images).map(item => {
-          const obj = {}
-          obj.uid = item
-          obj.name = "image.png";
-          obj.status = "done";
-          obj.url = item
-          return obj
-        }): null)
-        message.success('圖片上傳成功')
-      })
+    console.log(file)
+
+    new Compressor(file, {
+      quality: 0.8,
+      convertSize: 1000000,
+      success(result) {
+
+        fmData.append("image", result, result.name);
+        
+        uploadPicture(fmData, onUploadProgress, articleId).then((res) => {
+          if (!res.isSuccess) message.error('圖片上傳失敗');
+          getArticleById(articleId).then(res => {
+            setFileList(res.data.images? JSON.parse(res.data.images).map(item => {
+              const obj = {}
+              obj.uid = item
+              obj.name = "image.png";
+              obj.status = "done";
+              obj.url = item
+              return obj
+            }): null)
+            message.success('圖片上傳成功')
+          })
+        });
+      },
+      error(err) {
+        console.log(err.message);
+      },
     });
+    // console.log(fmData)
+
+    // fmData.append("image", file);
+    // uploadPicture(fmData, onUploadProgress, articleId).then((res) => {
+    //   if (!res.isSuccess) message.error('圖片上傳失敗');
+    //   getArticleById(articleId).then(res => {
+    //     setFileList(res.data.images? JSON.parse(res.data.images).map(item => {
+    //       const obj = {}
+    //       obj.uid = item
+    //       obj.name = "image.png";
+    //       obj.status = "done";
+    //       obj.url = item
+    //       return obj
+    //     }): null)
+    //     message.success('圖片上傳成功')
+    //   })
+    // });
   };
 
   const uploadButton = (
