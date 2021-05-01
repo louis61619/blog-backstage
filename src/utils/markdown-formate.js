@@ -1,6 +1,6 @@
 import marked from "marked";
 import hljs from "highlight.js";
-import "highlight.js/styles/monokai-sublime.css";
+import "highlight.js/styles/stackoverflow-dark.css";
 
 function checkURL(URL) {
   var str = URL;
