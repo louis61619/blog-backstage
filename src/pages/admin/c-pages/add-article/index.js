@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 
-import { useHistory } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { generatePath } from "react-router";
 import moment from 'moment'
 import marked from "@/utils/markdown-formate";
 
@@ -19,6 +20,7 @@ export default memo(function AddAritcle(props) {
 
   const history = useHistory()
   const labelRef = useRef()
+
   const [articleId, setArticleId] = useState(0); // 文章ＩＤ，0為新增，其他為修改
   const [articleTitle, setArticleTitle] = useState(""); // 文章標題
   const [articleContent, setArticleContent] = useState(""); // 文章的markdown
@@ -97,9 +99,7 @@ export default memo(function AddAritcle(props) {
     if(!isSuccess) return message.error('文章保存失敗')
     setArticleId(res.insertId)
     await setArticleLabels(res.insertId, selectedItems)
-    history.replace({
-      pathname: history.location.pathname + '/' + res.insertId
-    })
+    history.replace(generatePath(props.match.path, {id: res.insertId}))
     message.success('文章保存成功')
   }
 
