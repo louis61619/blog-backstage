@@ -1,25 +1,33 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import { generatePath } from "react-router";
-import moment from 'moment'
+import moment from "moment";
 import marked from "@/utils/markdown-formate";
 
-import { getLabelInfo, addContent, updateContent, getArticleById, setArticleLabels } from "@/services/addAritcle";
+import {
+  getLabelInfo,
+  addContent,
+  updateContent,
+  getArticleById,
+  setArticleLabels,
+} from "@/services/addAritcle";
 
-import { Row, Col, Input, Button, DatePicker, message } from "antd";
+import { Row, Col, Input, Button, DatePicker, message, Affix } from "antd";
 import LabelSelect from "@/components/label-select";
-import PictureDrawer from '@/components/picture-drawer'
+import PictureDrawer from "@/components/picture-drawer";
 
 import { WorkbanchWrapper } from "./style";
 
 const { TextArea } = Input;
 
 export default memo(function AddAritcle(props) {
-  const tmpId = props.match.params.id
+  const tmpId = props.match.params.id;
 
-  const history = useHistory()
-  const labelRef = useRef()
+  const history = useHistory();
+  const labelRef = useRef();
+
+  const [isFixed, setIsFixed] = useState(false)
 
   const [articleId, setArticleId] = useState(0); // 文章ＩＤ，0為新增，其他為修改
   const [articleTitle, setArticleTitle] = useState(""); // 文章標題
@@ -28,9 +36,9 @@ export default memo(function AddAritcle(props) {
   const [introducemd, setIntroducemd] = useState(); // 簡介的markdown
   // const [introducehtml, setIntroducehtml] = useState("等待編輯");
   const [releaseDate, setReleaseDate] = useState(); // 發布的日期
-  const [isRelease, setIsRelease] = useState(false)
+  const [isRelease, setIsRelease] = useState(false);
   const [labelInfo, setLabelInfo] = useState([]); // 文章類別
-  const [selectedItems, setSelectedItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState([]);
   const [isDrawerShow, setIsDrawerShow] = useState(false);
   const [fileList, setFileList] = useState([]);
 
@@ -41,30 +49,43 @@ export default memo(function AddAritcle(props) {
   }, []);
 
   useEffect(() => {
-    if(tmpId){
-      setArticleId(tmpId)
-      getArticleById(tmpId).then(res => {
-        const { title, introduce, context, labels, releaseTime, images } = res.data
-        setArticleTitle(title)
-        setIntroducemd(introduce)
-        setArticleContent(context)
-        setReleaseDate( releaseTime && moment(releaseTime).format('YYYY-MM-DD'))
-        releaseTime && setIsRelease(true)
-        setSelectedItems(labels ? JSON.parse(labels).map(item => item.id): null)
-        setFileList(images? JSON.parse(images).map(item => {
-          const obj = {}
-          obj.uid = item
-          obj.name = "image.png";
-          obj.status = "done";
-          obj.url = item
-          return obj
-        }): [])
+    if (tmpId) {
+      setArticleId(tmpId);
+      getArticleById(tmpId).then((res) => {
+        const {
+          title,
+          introduce,
+          context,
+          labels,
+          releaseTime,
+          images,
+        } = res.data;
+        setArticleTitle(title);
+        setIntroducemd(introduce);
+        setArticleContent(context);
+        setReleaseDate(releaseTime && moment(releaseTime).format("YYYY-MM-DD"));
+        releaseTime && setIsRelease(true);
+        setSelectedItems(
+          labels ? JSON.parse(labels).map((item) => item.id) : null
+        );
+        setFileList(
+          images
+            ? JSON.parse(images).map((item) => {
+                const obj = {};
+                obj.uid = item;
+                obj.name = "image.png";
+                obj.status = "done";
+                obj.url = item;
+                return obj;
+              })
+            : []
+        );
 
         // setIntroducehtml(marked(introduce))
-        setMarkdownContent(marked(context))
-      })
+        setMarkdownContent(marked(context));
+      });
     }
-  }, [tmpId])
+  }, [tmpId]);
 
   const changeContent = (e) => {
     setArticleContent(e.target.value);
@@ -79,90 +100,120 @@ export default memo(function AddAritcle(props) {
   };
 
   const selectLabelHandler = (value) => {
-    setSelectedItems(value)
-  }
+    setSelectedItems(value);
+  };
 
   const saveArticle = async () => {
+    if (!articleTitle) return message.error("文章標題不能為空");
+    if (!introducemd) return message.error("簡介不能為空");
+    if (!selectedItems.length) return message.error("必須選擇文章標籤");
+    if (!articleContent) return message.error("文章內容不能為空");
 
-    if(!articleTitle) return message.error('文章標題不能為空')
-    if(!introducemd) return message.error('簡介不能為空')
-    if(!selectedItems.length) return message.error('必須選擇文章標籤')
-    if(!articleContent) return message.error('文章內容不能為空')
-    
     let res;
-    if(articleId === 0) {
-      res = await addContent(articleTitle, introducemd, articleContent)
+    if (articleId === 0) {
+      res = await addContent(articleTitle, introducemd, articleContent);
     } else {
-      res = await updateContent(articleId, articleTitle, introducemd, articleContent)
+      res = await updateContent(
+        articleId,
+        articleTitle,
+        introducemd,
+        articleContent
+      );
     }
-    const { isSuccess } = res
-    if(!isSuccess) return message.error('文章保存失敗')
-    setArticleId(res.insertId)
-    await setArticleLabels(res.insertId, selectedItems)
-    history.replace(generatePath(props.match.path, {id: res.insertId}))
-    message.success('文章保存成功')
-  }
+    const { isSuccess } = res;
+    if (!isSuccess) return message.error("文章保存失敗");
+    setArticleId(res.insertId);
+    await setArticleLabels(res.insertId, selectedItems);
+    history.replace(generatePath(props.match.path, { id: res.insertId }));
+    message.success("文章保存成功");
+  };
 
   const releaseAritcle = async () => {
-    if(!selectedItems.length) return message.error('必須選擇文章標籤')
-    if(!articleTitle) return message.error('文章標題不能為空')
-    if(!articleContent) return message.error('文章內容不能為空')
-    if(!introducemd) return message.error('簡介不能為空')
-    if(!releaseDate) return message.error('發布日期不能為空')
+    if (!selectedItems.length) return message.error("必須選擇文章標籤");
+    if (!articleTitle) return message.error("文章標題不能為空");
+    if (!articleContent) return message.error("文章內容不能為空");
+    if (!introducemd) return message.error("簡介不能為空");
+    if (!releaseDate) return message.error("發布日期不能為空");
     let res;
-    if(articleId === 0) {
-      res = await addContent(articleTitle, introducemd, articleContent, releaseDate)
+    if (articleId === 0) {
+      res = await addContent(
+        articleTitle,
+        introducemd,
+        articleContent,
+        releaseDate
+      );
     } else {
-      res = await updateContent(articleId, articleTitle, introducemd, articleContent, releaseDate)
+      res = await updateContent(
+        articleId,
+        articleTitle,
+        introducemd,
+        articleContent,
+        releaseDate
+      );
     }
-    const { isSuccess } = res
-    if(!isSuccess) return message.error('文章發布失敗')
-    setArticleId(res.insertId)
-    await setArticleLabels(res.insertId, selectedItems)
-    message.success('文章發布成功')
-  }
+    const { isSuccess } = res;
+    if (!isSuccess) return message.error("文章發布失敗");
+    setArticleId(res.insertId);
+    await setArticleLabels(res.insertId, selectedItems);
+    message.success("文章發布成功");
+  };
 
-  const disabledDate = (current) => { return current < moment().startOf('day') }
+  const disabledDate = (current) => {
+    return current < moment().startOf("day");
+  };
 
   const showDrawer = () => {
-    if(!articleId) return message.error('請先保存文章')
+    if (!articleId) return message.error("請先保存文章");
     setIsDrawerShow(true);
   };
 
   return (
-    <WorkbanchWrapper>
+    <WorkbanchWrapper isFixed={isFixed}>
       <Row gutter={5}>
         <Col span={24}>
-          <Row gutter={10}>
-            <Col span={16}>
-              <Input
-                placeholder="博客標題"
-                size="large"
-                onChange={e => setArticleTitle(e.target.value)}
-                value={articleTitle}
-              />
-            </Col>
-            <Col
-              span={8}
-              style={{ display: "flex", justifyContent: "space-around" }}
-            >
-              <Button size="large" onClick={showDrawer}>圖片管理</Button> 
-              <DatePicker
-                placeholder="發布日期"
-                size="large"
-                value={releaseDate? moment(releaseDate, 'YYYY-MM-DD'): null}
-                disabledDate={disabledDate}
-                onChange={(date, dateString) => setReleaseDate(dateString)}
-              />
-               {/* 1. 判斷有沒有發布 有發布的話無論如何只能有發布文章的按紐 發布 有發布日期 或是 已經發布
+          <Affix onChange={(affixed) => setIsFixed(affixed)}>
+            <Row gutter={10} className="top-tools">
+              <Col span={16}>
+                <Input
+                  placeholder="博客標題"
+                  size="large"
+                  onChange={(e) => setArticleTitle(e.target.value)}
+                  value={articleTitle}
+                />
+              </Col>
+              <Col
+                span={8}
+                style={{ display: "flex", justifyContent: "space-around" }}
+              >
+                <Button size="large" onClick={showDrawer}>
+                  圖片管理
+                </Button>
+                <DatePicker
+                  placeholder="發布日期"
+                  size="large"
+                  value={releaseDate ? moment(releaseDate, "YYYY-MM-DD") : null}
+                  disabledDate={disabledDate}
+                  onChange={(date, dateString) => setReleaseDate(dateString)}
+                />
+                {/* 1. 判斷有沒有發布 有發布的話無論如何只能有發布文章的按紐 發布 有發布日期 或是 已經發布
                2. 判斷有沒有發布日期 有發布日期的話就是發布文章 沒有就是暫存 暫存是沒有發布日期 同時 沒有發布 */}
-              {!isRelease && !releaseDate? 
-               <Button size="large" type="primary" disabled={isRelease} onClick={saveArticle}>保存文章</Button> :
-              <Button type="primary" size="large" onClick={releaseAritcle}>
-                發布文章
-              </Button>}
-            </Col>
-          </Row>
+                {!isRelease && !releaseDate ? (
+                  <Button
+                    size="large"
+                    type="primary"
+                    disabled={isRelease}
+                    onClick={saveArticle}
+                  >
+                    保存文章
+                  </Button>
+                ) : (
+                  <Button type="primary" size="large" onClick={releaseAritcle}>
+                    發布文章
+                  </Button>
+                )}
+              </Col>
+            </Row>
+          </Affix>
           <br />
           <Row gutter={10}>
             <Col span={24}>
@@ -176,24 +227,15 @@ export default memo(function AddAritcle(props) {
               />
             </Col>
           </Row>
-          {/* <br />
-          <Row gutter={10}>
-            <Col span={24}>
-              <div
-                className="introduce-html"
-                dangerouslySetInnerHTML={{
-                  __html: "文章簡介：" + introducehtml,
-                }}
-              />
-            </Col>
-          </Row> */}
           <br />
           <Row gutter={10}>
             <Col span={24}>
-              <LabelSelect labelInfo={labelInfo}
-                           selectedItems={selectedItems}
-                           selectLabelHandler={selectLabelHandler}
-                           ref={labelRef}/>
+              <LabelSelect
+                labelInfo={labelInfo}
+                selectedItems={selectedItems}
+                selectLabelHandler={selectLabelHandler}
+                ref={labelRef}
+              />
             </Col>
           </Row>
           <br />
@@ -217,11 +259,13 @@ export default memo(function AddAritcle(props) {
           </Row>
         </Col>
       </Row>
-      <PictureDrawer isDrawerShow={isDrawerShow} 
-                     setIsDrawerShow={setIsDrawerShow}
-                     fileList={fileList}
-                     setFileList={setFileList}
-                     articleId={articleId} />
+      <PictureDrawer
+        isDrawerShow={isDrawerShow}
+        setIsDrawerShow={setIsDrawerShow}
+        fileList={fileList}
+        setFileList={setFileList}
+        articleId={articleId}
+      />
     </WorkbanchWrapper>
   );
 });

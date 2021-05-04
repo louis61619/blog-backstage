@@ -7,6 +7,16 @@ export const WorkbanchWrapper = styled.div`
     height: 100%;
   }
 
+  .top-tools {
+    opacity: ${props => {
+      return props.isFixed? .9 : 1
+    }};
+    padding-bottom: ${props => {
+      return props.isFixed? '10px': '0px'  
+    }};
+    background-color: white;
+  }
+
   .show-html {
     padding: 10px;
     border: 1px solid #ddd;
