@@ -1,70 +1,110 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+ # 部落格後台
 
-In the project directory, you can run:
+這是一個力求操作流暢、體驗舒適的部落格管理介面，使用React搭建，你的星星是我最大的鼓勵
 
-### `yarn start`
+如果有任何可以改進的地方，歡迎來到我的部落格留言或是提交issue
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+部落格地址：https://mycoderland.tw
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+前台源碼：https://github.com/louis61619/blog-frontstage.git
 
-### `yarn test`
+後台源碼：https://github.com/louis61619/blog-backstage.git
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+服務端源碼：https://github.com/louis61619/blog-server.git
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 技術棧
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+以下列出主要使用的框架和庫
 
-### `yarn eject`
+- React
+- React-router
+- React-redux
+- Immutable
+- Echarts
+- Ant-design
+- Marked
+- Styled-components
+- Axios
+- craco
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 開發環境搭建
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+> 由於本項目是採用前後端分離，所以需要同時下載前後端的部分，項目中提供了一組FB登錄API的測試權杖
 
-## Learn More
+- 下載nodejs，nodejs版本需大於13，推薦使用yarn取代npm
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- 下載本項目後端 : https://github.com/louis61619/blog-server
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 資料庫使用mysql
 
-### Code Splitting
+  - 如果要使用本地mysql，請匯入後端項目內的sql資料，具體步驟如下:
+    - 創建資料庫並命名為react_blog
+    - 設定mysql端口為3310
+    - 匯入資料，該檔案位於/react-blog02.sql
+    - 如果要修改設定參數請參閱
+  - 如果不想使用本地mysql 可以使用docker，只要下指令**dokcer -d -p 3310:3306 louis61619/blog-data**即可運行該鏡像
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- 啟用後端API
 
-### Analyzing the Bundle Size
+  ```
+  yarn install && yarn dev
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- 如果想要在開發環境中瀏覽部落格，請下載blog前台 https://github.com/louis61619/blog-frontstage.git，然後在根目錄下指令(默認啟用端口為3000)
 
-### Making a Progressive Web App
+  ```
+  yarn install && yarn start
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- 如果想要在開發環境中編輯部落格內容，請下載blog後台 https://github.com/louis61619/blog-backstage.git，然後在根目錄下指令(默認啟用端口為3001)
 
-### Advanced Configuration
+  ```
+  yarn install && yarn dev
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  
 
-### Deployment
+## 環境變量
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+| Keys                 | Introduction |
+| -------------------- | ------------ |
+| REACT_APP_SERVER_URL | 服務端URL    |
+| REACT_APP_STATIC_URL | 圖片地址前綴 |
 
-### `yarn build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## 功能
+
+> 1.0
+
+- 登錄
+
+![image-20210507160410319](./images/image-20210507160410319.png)
+
+- 總覽
+  - 修改管理員資料
+
+  - 瀏覽量統計
+
+![image-20210507160319127](./images/image-20210507160319127.png)
+
+- 會員管理
+  - 黑名單(禁止留言)
+
+![](./images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202021-05-07%20161218.png)
+
+- 文章管理
+  - 添加文章
+  - 文章列表
+- 留言管理
+  - 刪除留言
+  - 回覆留言
+
+
+
