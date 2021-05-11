@@ -1,4 +1,7 @@
+---
+typora-copy-images-to: ./images
 
+---
 
  # 部落格後台
 
@@ -104,9 +107,13 @@
   - 文章列表
   - 搜索標題
 
-![image-20210510203845053](./images/image-20210510203845053.png)
+![image-20210511194458656](./images/image-20210511194458656.png)
 
-![image-20210510203942265](/Users/hsiehjungjui/Library/Application Support/typora-user-images/image-20210510203942265.png)
+![image-20210511194527030](./images/image-20210511194527030.png)
+
+![image-20210511194627391](./images/image-20210511194627391.png)
+
+![image-20210511194740174](./images/image-20210511194740174.png)
 
 - 留言管理
   - 刪除留言
