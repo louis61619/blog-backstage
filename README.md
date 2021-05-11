@@ -48,6 +48,8 @@
     - 匯入資料，該檔案位於/react-blog02.sql
     - 如果要修改設定參數請參閱
   - 如果不想使用本地mysql 可以使用docker，只要下指令**dokcer -d -p 3310:3306 louis61619/blog-data**即可運行該鏡像
+    - 如果想要修改對外端口，可以直接修改 3310這個參數
+    - 如果想要掛載volume，可以在指令中加入 -v <本地目錄>:/var/lib/mysql
 
 - 啟用後端API
 
@@ -55,13 +57,13 @@
   yarn install && yarn dev
   ```
 
-- 如果想要在開發環境中瀏覽部落格，請下載blog前台 https://github.com/louis61619/blog-frontstage.git，然後在根目錄下指令(默認啟用端口為3000)
+- 如果想要在開發環境中瀏覽部落格，請下載[blog前台]( https://github.com/louis61619/blog-frontstage.git)，然後在根目錄下指令(默認啟用端口為3000)
 
   ```
   yarn install && yarn start
   ```
 
-- 如果想要在開發環境中編輯部落格內容，請下載blog後台 https://github.com/louis61619/blog-backstage.git，然後在根目錄下指令(默認啟用端口為3001)
+- 如果想要在開發環境中編輯部落格內容，請下載[blog後台](https://github.com/louis61619/blog-backstage.git) ，然後在根目錄下指令(默認啟用端口為3001)
 
   ```
   yarn install && yarn dev
