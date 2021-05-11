@@ -1,7 +1,3 @@
----
-typora-copy-images-to: ./images
-
----
 
  # 部落格後台
 
