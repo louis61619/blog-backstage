@@ -27,8 +27,13 @@ export default memo(function Login(props) {
     //   setIsLoading(true);
     //   return false;
     // }
-    const res = await getLoginOpenId(userName, password);
-
+    let res
+    try {
+      res = await getLoginOpenId(userName, password);
+    } catch (error) {
+      console.log(error)
+    }
+    
     setIsLoading(false);
     if (res.data === "success") {
       localStorage.setItem("openId", res.openId);
