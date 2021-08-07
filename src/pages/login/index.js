@@ -19,7 +19,6 @@ export default memo(function Login(props) {
 
     if (!userName) {
       message.error("用戶名不能為空");
-      setIsLoading(true);
       return false;
     }
     // if (!password) {
