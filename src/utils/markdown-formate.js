@@ -15,7 +15,7 @@ function checkURL(URL) {
 const renderer = new marked.Renderer();
 
 renderer.image = function (src, title, alt) {
-  const newSrc = checkURL(src)? src : process.env.REACT_APP_STATIC_URL + src;
+  const newSrc = checkURL(src)? src : process.env.REACT_APP_MARKDOWN_IMAGE_URL + src;
   return `<img src="${newSrc}" />`;
 };
 
